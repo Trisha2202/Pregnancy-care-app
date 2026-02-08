@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mood Assessment</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(#e3fafc, #fff0f5);
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #1864ab;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 600px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .question {
+      text-align: left;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 25px;
+      font-size: 16px;
+      background: #1864ab;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 25px;
+      padding: 20px;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    .normal { background: #d3f9d8; }
+    .mild { background: #fff3bf; }
+    .high { background: #ffe3e3; }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      color: #1864ab;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🧠 Emotional Wellbeing Check</h1>
+  <p>Answer honestly — this helps us support you better 💙</p>
+
+  <div class="card">
+    <div class="question">
+      1️⃣ Are you feeling down or sad most of the day?
+      <br>
+      <input type="radio" name="q1" value="yes"> Yes
+      <input type="radio" name="q1" value="no"> No
+    </div>
+
+    <div class="question">
+      2️⃣ Have you lost interest in things you usually enjoy?
+      <br>
+      <input type="radio" name="q2" value="yes"> Yes
+      <input type="radio" name="q2" value="no"> No
+    </div>
+
+    <div class="question">
+      3️⃣ Are you feeling unusually tired or low on energy?
+      <br>
+      <input type="radio" name="q3" value="yes"> Yes
+      <input type="radio" name="q3" value="no"> No
+    </div>
+
+    <div class="question">
+      4️⃣ Are you having changes in appetite (eating too little or too much)?
+      <br>
+      <input type="radio" name="q4" value="yes"> Yes
+      <input type="radio" name="q4" value="no"> No
+    </div>
+
+    <div class="question">
+      5️⃣ Are you feeling anxious, worried, or stressed?
+      <br>
+      <input type="radio" name="q5" value="yes"> Yes
+      <input type="radio" name="q5" value="no"> No
+    </div>
+
+    <button onclick="checkMood()">Check My Mood</button>
+
+    <div id="result" class="result" style="display:none;"></div>
+  </div>
+
+  <a href="index.html">⬅ Back to Home</a>
+
+  <script>
+    function checkMood() {
+      let score = 0;
+
+      for (let i = 1; i <= 5; i++) {
+        let answer = document.querySelector('input[name="q'+i+'"]:checked');
+        if (!answer) {
+          alert("Please answer all questions 💙");
+          return;
+        }
+        if (answer.value === "yes") {
+          score++;
+        }
+      }
+
+      let result = document.getElementById("result");
+      result.style.display = "block";
+
+      if (score <= 1) {
+        result.className = "result normal";
+        result.innerHTML = `
+          😊 <b>Mood Status: Normal</b><br><br>
+          You're doing well! Keep taking care of yourself 💖<br>
+          ✔ Eat balanced meals<br>
+          ✔ Stay hydrated<br>
+          ✔ Take light walks & rest well
+        `;
+      }
+      else if (score <= 3) {
+        result.className = "result mild";
+        result.innerHTML = `
+          🌤 <b>Mood Status: Mild Stress</b><br><br>
+          It's okay to feel this way. Try these:<br>
+          🧘 Deep breathing or meditation<br>
+          📞 Talk to a loved one<br>
+          🎵 Listen to calming music<br>
+          📝 Express your feelings
+        `;
+      }
+      else {
+        result.className = "result high";
+        result.innerHTML = `
+          💙 <b>Mood Status: High Emotional Stress</b><br><br>
+          You're not alone. Support can help 🌸<br>
+          ✔ Talk to a healthcare provider<br>
+          ✔ Reach out to family or friends<br>
+          ✔ Consider professional help<br><br>
+          📞 <b>Helpline suggestion:</b> Contact a local health worker or mental health helpline.
+        `;
+      }
+    }
+  </script>
+
+</body>
+</html>
+<!-- Back to Home Button for mood.html -->
+<a href="index.html" class="back-home">🏠 Back to Home</a>
+
+<style>
+.back-home {
+    display: inline-block;
+    margin: 20px 20px 10px 20px;
+    padding: 12px 20px;
+    background: #ff1493;
+    color: white;
+    font-weight: bold;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 16px;
+    box-shadow: 0 5px 15px rgba(255,20,147,0.4);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+.back-home:hover {
+    background: #ff6eb4;
+    transform: scale(1.1);
+}
+</style>
+<!-- Back to Home Button for dailyreminder.html -->
+<a href="index.html" class="back-home">🏠 Back to Home</a>

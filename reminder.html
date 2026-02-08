@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Reminder - Pregnancy App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #FFF0F5;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #FF1493;
+            margin-top: 20px;
+        }
+
+        .reminder-section {
+            background: #FFE4E1;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        input, select, button {
+            padding: 8px 12px;
+            margin: 5px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #32CD32;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #228B22;
+        }
+
+        .reminder-list {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .reminder-item {
+            background: #FFF8DC;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 10px;
+            box-shadow: 1px 2px 3px rgba(0,0,0,0.1);
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: #FF69B4;
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="back-btn" onclick="window.location.href='index.html'">🏠 Back</button>
+
+    <h1>⏰ Daily Reminders</h1>
+
+    <!-- Medicine Reminder -->
+    <div class="reminder-section">
+        <h2>💊 Medicine Reminder</h2>
+        <input type="text" id="medName" placeholder="Medicine Name">
+        <input type="text" id="medDose" placeholder="Dose">
+        <input type="time" id="medTime">
+        <button onclick="addMedicineReminder()">Add Medicine</button>
+    </div>
+
+    <!-- Exercise Reminder -->
+    <div class="reminder-section">
+        <h2>🧘‍♀️ Exercise Reminder</h2>
+        <input type="text" id="exerciseName" placeholder="Exercise / Yoga Name">
+        <input type="time" id="exerciseTime">
+        <button onclick="addExerciseReminder()">Add Exercise</button>
+    </div>
+
+    <!-- Gynecologist Appointment -->
+    <div class="reminder-section">
+        <h2>👩‍⚕️ Gynecologist Appointment</h2>
+        <input type="text" id="doctorName" placeholder="Doctor Name / Clinic">
+        <input type="date" id="appointmentDate">
+        <input type="time" id="appointmentTime">
+        <button onclick="addDoctorReminder()">Add Appointment</button>
+    </div>
+
+    <!-- Reminder Display -->
+    <div class="reminder-section">
+        <h2>📋 Your Reminders</h2>
+        <div class="reminder-list" id="reminderList">
+            <!-- Reminders will appear here -->
+        </div>
+    </div>
+
+    <script>
+        // Load reminders from localStorage on page load
+        const reminders = JSON.parse(localStorage.getItem('reminders')) || [];
+
+        function displayReminders() {
+            const list = document.getElementById('reminderList');
+            list.innerHTML = '';
+            reminders.forEach((r, index) => {
+                let html = `<div class="reminder-item">`;
+                if(r.type === 'medicine'){
+                    html += `💊 <strong>${r.name}</strong> - ${r.dose} at ${r.time}`;
+                } else if(r.type === 'exercise'){
+                    html += `🧘‍♀️ <strong>${r.name}</strong> at ${r.time}`;
+                } else if(r.type === 'doctor'){
+                    html += `👩‍⚕️ <strong>${r.name}</strong> on ${r.date} at ${r.time}`;
+                }
+                html += ` <button onclick="deleteReminder(${index})" style="background:red;">❌</button>`;
+                html += `</div>`;
+                list.innerHTML += html;
+            });
+        }
+
+        function saveReminders() {
+            localStorage.setItem('reminders', JSON.stringify(reminders));
+        }
+
+        function addMedicineReminder() {
+            const name = document.getElementById('medName').value;
+            const dose = document.getElementById('medDose').value;
+            const time = document.getElementById('medTime').value;
+            if(name && dose && time){
+                reminders.push({type:'medicine', name, dose, time});
+                saveReminders();
+                displayReminders();
+                document.getElementById('medName').value = '';
+                document.getElementById('medDose').value = '';
+                document.getElementById('medTime').value = '';
+            } else {
+                alert('Please fill all fields for medicine reminder.');
+            }
+        }
+
+        function addExerciseReminder() {
+            const name = document.getElementById('exerciseName').value;
+            const time = document.getElementById('exerciseTime').value;
+            if(name && time){
+                reminders.push({type:'exercise', name, time});
+                saveReminders();
+                displayReminders();
+                document.getElementById('exerciseName').value = '';
+                document.getElementById('exerciseTime').value = '';
+            } else {
+                alert('Please fill all fields for exercise reminder.');
+            }
+        }
+
+        function addDoctorReminder() {
+            const name = document.getElementById('doctorName').value;
+            const date = document.getElementById('appointmentDate').value;
+            const time = document.getElementById('appointmentTime').value;
+            if(name && date && time){
+                reminders.push({type:'doctor', name, date, time});
+                saveReminders();
+                displayReminders();
+                document.getElementById('doctorName').value = '';
+                document.getElementById('appointmentDate').value = '';
+                document.getElementById('appointmentTime').value = '';
+            } else {
+                alert('Please fill all fields for appointment.');
+            }
+        }
+
+        function deleteReminder(index) {
+            reminders.splice(index, 1);
+            saveReminders();
+            displayReminders();
+        }
+
+        // Initial load
+        displayReminders();
+    </script>
+
+</body>
+</html>

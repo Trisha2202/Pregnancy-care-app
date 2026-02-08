@@ -1,0 +1,201 @@
+
+
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile - Pregnancy App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #FFF0F5;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #FF1493;
+            margin-top: 20px;
+        }
+
+        .profile-container {
+            background: #FFE4E1;
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .profile-section {
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        .profile-section h2 {
+            color: #FF69B4;
+            margin-bottom: 10px;
+        }
+
+        .profile-section p {
+            margin: 5px 0;
+        }
+
+        .button {
+            padding: 10px 20px;
+            margin: 10px 5px;
+            border-radius: 20px;
+            border: none;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .logout-btn { background-color: #FF4500; color: white; }
+        .back-btn { background-color: #32CD32; color: white; }
+        .guest-btn { background-color: #1E90FF; color: white; }
+        .create-btn { background-color: #FF1493; color: white; }
+
+        .reminder-item, .search-item {
+            background: #FFF8DC;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 10px;
+            box-shadow: 1px 2px 3px rgba(0,0,0,0.1);
+        }
+
+        /* Bottom-left buttons when not logged in */
+        .bottom-left-btns {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+<h1>👩‍🍼 My Profile</h1>
+
+<!-- Profile Content for logged-in users -->
+<div class="profile-container" id="profileContent">
+    <!-- User Info -->
+    <div class="profile-section" id="userInfo">
+        <h2>Personal Details</h2>
+        <p><strong>Name:</strong> <span id="name"></span></p>
+        <p><strong>Username:</strong> <span id="username"></span></p>
+        <p><strong>Email:</strong> <span id="email"></span></p>
+        <p><strong>Phone:</strong> <span id="number"></span></p>
+        <p><strong>Age:</strong> <span id="age"></span></p>
+        <p><strong>Date of Birth:</strong> <span id="dob"></span></p>
+        <p><strong>Weight:</strong> <span id="weight"></span> kg</p>
+        <p><strong>Height:</strong> <span id="height"></span> cm</p>
+        <p><strong>Month of Pregnancy:</strong> <span id="pregMonth"></span></p>
+        <p><strong>Marital Status:</strong> <span id="maritalStatus"></span></p>
+    </div>
+
+    <!-- Reminders -->
+    <div class="profile-section">
+        <h2>📋 Reminder History</h2>
+        <div id="reminderList"></div>
+    </div>
+
+    <!-- Search History -->
+    <div class="profile-section">
+        <h2>🔎 Search History</h2>
+        <div id="searchList"></div>
+    </div>
+
+    <!-- Buttons -->
+    <button class="button logout-btn" id="logoutBtn">Logout</button>
+    <button class="button back-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+</div>
+
+<!-- Buttons for not logged-in user -->
+<div class="bottom-left-btns" id="guestButtons" style="display:none;">
+    <button class="button create-btn" onclick="window.location.href='login.html'">👩‍🍼 Create Account</button>
+    <button class="button guest-btn" id="useGuestBtn">👤 Use as Guest</button>
+</div>
+
+<script>
+    // Load user data from localStorage
+    const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+
+    function displayProfile(user) {
+        if(user){
+            // Logged-in user view
+            document.getElementById('profileContent').style.display = 'block';
+            document.getElementById('guestButtons').style.display = 'none';
+
+            document.getElementById('name').textContent = user.name;
+            document.getElementById('username').textContent = user.username;
+            document.getElementById('email').textContent = user.email;
+            document.getElementById('number').textContent = user.number;
+            document.getElementById('age').textContent = user.age;
+            document.getElementById('dob').textContent = user.dob;
+            document.getElementById('weight').textContent = user.weight;
+            document.getElementById('height').textContent = user.height;
+            document.getElementById('pregMonth').textContent = user.pregMonth;
+            document.getElementById('maritalStatus').textContent = user.maritalStatus;
+        } else {
+            // Not logged in
+            document.getElementById('profileContent').style.display = 'none';
+            document.getElementById('guestButtons').style.display = 'flex';
+        }
+    }
+
+    displayProfile(userProfile);
+
+    // Load reminders
+    const reminders = JSON.parse(localStorage.getItem('reminders')) || [];
+    const reminderList = document.getElementById('reminderList');
+    reminders.forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'reminder-item';
+        if(r.type === 'medicine'){
+            div.textContent = `💊 ${r.name} - ${r.dose} at ${r.time}`;
+        } else if(r.type === 'exercise'){
+            div.textContent = `🧘‍♀️ ${r.name} at ${r.time}`;
+        } else if(r.type === 'doctor'){
+            div.textContent = `👩‍⚕️ ${r.name} on ${r.date} at ${r.time}`;
+        }
+        reminderList.appendChild(div);
+    });
+
+    // Load search history
+    const searches = JSON.parse(localStorage.getItem('searchHistory')) || [];
+    const searchList = document.getElementById('searchList');
+    searches.forEach(s => {
+        const div = document.createElement('div');
+        div.className = 'search-item';
+        div.textContent = `🔹 ${s}`;
+        searchList.appendChild(div);
+    });
+
+    // Logout button
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('userProfile');
+        localStorage.removeItem('reminders');
+        localStorage.removeItem('searchHistory');
+
+        alert('You have been logged out!');
+
+        document.getElementById('profileContent').style.display = 'none';
+        document.getElementById('guestButtons').style.display = 'flex';
+    });
+
+    // Use as Guest button
+    document.getElementById('useGuestBtn').addEventListener('click', () => {
+        alert("You are now using the app as Guest!");
+        window.location.href = 'index.html';
+    });
+</script>
+
+</body>
+</html>
+<!-- Back to Home Button -->
+<button class="button back-btn" onclick="window.location.href='index.html'">🏠 Back to Home</button>

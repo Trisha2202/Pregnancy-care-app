@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Childcare Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #E6F7FF;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #FF69B4;
+            margin-top: 20px;
+        }
+
+        .container {
+            background: #F0FFFF;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        select, input[type="text"], button {
+            padding: 10px;
+            margin: 10px;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        select, input[type="text"] {
+            border: 1px solid #ccc;
+            width: 250px;
+        }
+
+        button {
+            border: none;
+            cursor: pointer;
+            color: white;
+            background-color: #FF1493;
+            border-radius: 20px;
+        }
+
+        #displayItems, #result {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: left;
+        }
+
+        .item-box {
+            background: #FFFACD;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 10px;
+        }
+
+        .back-btn {
+            background-color: #32CD32;
+            padding: 10px 25px;
+            border-radius: 25px;
+            margin-top: 20px;
+        }
+
+        #result {
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>👶 Childcare Guide</h1>
+
+<div class="container">
+    <h2>Step 1: Select Baby's Age (in months)</h2>
+    <select id="babyAge" onchange="resetDisplay()">
+        <option value="">--Select Age--</option>
+        <option value="0-3">0-3 months</option>
+        <option value="4-6">4-6 months</option>
+        <option value="7-12">7-12 months</option>
+        <option value="13-24">13-24 months</option>
+        <option value="25-36">25-36 months</option>
+    </select>
+
+    <h2>Step 2: Select Category</h2>
+    <button onclick="showCategory('food')">🍽 Food</button>
+    <button onclick="showCategory('skincare')">🧴 Skincare</button>
+
+    <div id="displayItems"></div>
+
+    <h2>Search a Food or Skincare Item</h2>
+    <input type="text" id="searchItem" placeholder="Enter item name">
+    <button onclick="checkSafety()">Search</button>
+
+    <div id="result"></div>
+
+    <button class="back-btn" onclick="window.location.href='index.html'">🏠 Back to Home</button>
+</div>
+
+<script>
+    // Data for foods per age
+    const babyFoodData = {
+        "0-3": ["breast milk", "formula milk", "water"],
+        "4-6": ["breast milk", "formula milk", "pureed apple", "pureed pear", "mashed carrot", "mashed peas", "mashed sweet potato"],
+        "7-12": ["breast milk","formula milk","mashed banana","mashed avocado","mashed fruits","cooked carrot","cooked peas","soft cereals","mashed potato","mashed chicken"],
+        "13-24": ["soft fruits","vegetables","grains","soft meat","egg yolk","cheese","yogurt","rice","oatmeal"],
+        "25-36": ["balanced diet","fruits","vegetables","grains","proteins","dairy","pasta","soft cooked meat","beans","eggs"]
+    };
+
+    // Data for skincare per age
+    const babySkinData = {
+        "0-3": ["baby lotion","baby oil","mild baby soap","aloe vera gel"],
+        "4-6": ["baby lotion","baby oil","mild soap","aloe vera gel","shea butter"],
+        "7-12": ["baby lotion","baby oil","aloe vera gel","shea butter","mild cream"],
+        "13-24": ["baby lotion","aloe vera gel","shea butter","mild cream","unscented oil"],
+        "25-36": ["baby lotion","aloe vera gel","shea butter","unscented oil","mild cream"]
+    };
+
+    // Combined safe/unsafe database for search
+    const babySafetyData = {
+        "0-3": { 
+            safe: ["breast milk","formula milk","water","baby lotion","baby oil","mild baby soap","aloe vera gel"], 
+            unsafe: ["honey","cow milk","chocolate","solid food","juice","nuts","strong oils"] 
+        },
+        "4-6": { 
+            safe: ["breast milk","formula milk","pureed apple","pureed pear","mashed carrot","mashed peas","mashed sweet potato","water","baby lotion","baby oil","mild soap","aloe vera gel","shea butter"], 
+            unsafe: ["honey","nuts","chocolate","cow milk","juice","spicy food","strong oils"] 
+        },
+        "7-12": { 
+            safe: ["breast milk","formula milk","mashed banana","mashed avocado","mashed fruits","cooked carrot","cooked peas","soft cereals","mashed potato","mashed chicken","water","baby lotion","baby oil","aloe vera gel","shea butter","mild cream"], 
+            unsafe: ["honey","nuts","chocolate","whole milk","spicy food","strong oils","raw egg"] 
+        },
+        "13-24": { 
+            safe: ["soft fruits","vegetables","grains","soft meat","egg yolk","cheese","yogurt","rice","oatmeal","water","baby lotion","aloe vera gel","shea butter","mild cream","unscented oil"], 
+            unsafe: ["chocolate","sweets","nuts","honey","spicy food","strong oils","raw meat"] 
+        },
+        "25-36": { 
+            safe: ["balanced diet","fruits","vegetables","grains","proteins","dairy","pasta","soft cooked meat","beans","eggs","water","baby lotion","aloe vera gel","shea butter","unscented oil","mild cream"], 
+            unsafe: ["sweets","chocolate","raw honey","peanuts","spicy food","strong oils"] 
+        }
+    };
+
+    function resetDisplay() {
+        document.getElementById('displayItems').innerHTML = "";
+        document.getElementById('result').innerHTML = "";
+    }
+
+    function showCategory(category) {
+        const age = document.getElementById('babyAge').value;
+        const displayDiv = document.getElementById('displayItems');
+        displayDiv.innerHTML = "";
+        document.getElementById('result').innerHTML = "";
+
+        if(!age){
+            alert("Please select baby's age first!");
+            return;
+        }
+
+        let items = [];
+        if(category === 'food') items = babyFoodData[age];
+        else if(category === 'skincare') items = babySkinData[age];
+
+        const h3 = document.createElement('h3');
+        h3.textContent = category === 'food' ? `🍽 Foods recommended for ${age} months:` : `🧴 Skincare recommended for ${age} months:`;
+        displayDiv.appendChild(h3);
+
+        items.forEach(i => {
+            const div = document.createElement('div');
+            div.className = 'item-box';
+            div.textContent = i;
+            displayDiv.appendChild(div);
+        });
+    }
+
+    function checkSafety() {
+        const age = document.getElementById('babyAge').value;
+        const item = document.getElementById('searchItem').value.trim().toLowerCase();
+        const resultDiv = document.getElementById('result');
+
+        if(!age){
+            alert("Please select baby's age first!");
+            return;
+        }
+        if(!item){
+            alert("Please enter an item to search!");
+            return;
+        }
+
+        const safeItems = babySafetyData[age].safe;
+        const unsafeItems = babySafetyData[age].unsafe;
+
+        const isSafe = safeItems.some(i => i.includes(item));
+        const isUnsafe = unsafeItems.some(i => i.includes(item));
+
+        if(isSafe){
+            resultDiv.style.color = "green";
+            resultDiv.textContent = `✅ "${item}" is SAFE for a baby aged ${age} months.`;
+        } else if(isUnsafe){
+            resultDiv.style.color = "red";
+            resultDiv.textContent = `❌ "${item}" is NOT SAFE for a baby aged ${age} months.`;
+        } else {
+            resultDiv.style.color = "orange";
+            resultDiv.textContent = `⚠️ Safety information for "${item}" is not available.`;
+        }
+    }
+</script>
+
+</body>
+</html>

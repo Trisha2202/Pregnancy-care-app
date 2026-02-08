@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Emergency Contacts & Help</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    background: linear-gradient(to right, #fff0f5, #ffe6f2);
+}
+
+header {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #ff6eb4, #ff1493);
+    color: white;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+header h1 {
+    font-size: 36px;
+    margin: 0;
+}
+
+.container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 20px;
+    background: #fff0f5;
+    border-radius: 25px;
+    box-shadow: 0 5px 20px rgba(255,20,147,0.3);
+}
+
+section {
+    margin-bottom: 30px;
+}
+
+h2 {
+    color: #ff1493;
+    border-bottom: 2px solid #ff1493;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+form input, form button {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    border: 1px solid #ff1493;
+    width: 100%;
+    font-size: 14px;
+}
+
+form button {
+    background: #ff1493;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+form button:hover {
+    background: #ff6eb4;
+}
+
+.contact-list {
+    margin-top: 20px;
+}
+
+.contact-item {
+    background: #ffe6f2;
+    padding: 12px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(255,20,147,0.2);
+}
+
+.contact-item span {
+    color: #ff1493;
+    font-weight: bold;
+}
+
+.contact-item button {
+    background: #ff1493;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 10px;
+}
+
+.contact-item button:hover {
+    background: #ff6eb4;
+}
+
+.quick-links a {
+    display: block;
+    text-decoration: none;
+    color: white;
+    background: #ff1493;
+    text-align: center;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 20px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.quick-links a:hover {
+    background: #ff6eb4;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>🚨 Emergency Help</h1>
+</header>
+
+<div class="container">
+
+    <!-- Add Personal Emergency Contact -->
+    <section>
+        <h2>Add Personal Emergency Contact</h2>
+        <form id="contactForm">
+            <input type="text" id="contactName" placeholder="Contact Name" required>
+            <input type="tel" id="contactNumber" placeholder="Phone Number" required>
+            <button type="submit">Save Contact</button>
+        </form>
+
+        <div class="contact-list" id="contactList">
+            <!-- Contacts will appear here -->
+        </div>
+    </section>
+
+    <!-- Quick Access to Nearby Gynecologists -->
+    <section>
+        <h2>Nearby Gynecologists / Hospitals</h2>
+        <div class="quick-links">
+            <a href="https://www.google.com/maps/search/gynecologist+near+me" target="_blank">📍 Find Gynecologist Near Me</a>
+            <a href="tel:108">🚑 Call Ambulance / Emergency (108)</a>
+        </div>
+    </section>
+
+</div>
+
+<script>
+// Retrieve contacts from localStorage
+let contacts = JSON.parse(localStorage.getItem('emergencyContacts')) || [];
+
+// Display contacts
+function displayContacts(){
+    const list = document.getElementById('contactList');
+    list.innerHTML = '';
+    contacts.forEach((contact, index)=>{
+        const div = document.createElement('div');
+        div.className = 'contact-item';
+        div.innerHTML = `<span>${contact.name}: ${contact.number}</span>
+                         <button onclick="callContact('${contact.number}')">Call</button>
+                         <button onclick="deleteContact(${index})">Delete</button>`;
+        list.appendChild(div);
+    });
+}
+
+// Add contact
+document.getElementById('contactForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = document.getElementById('contactName').value;
+    const number = document.getElementById('contactNumber').value;
+    contacts.push({name, number});
+    localStorage.setItem('emergencyContacts', JSON.stringify(contacts));
+    displayContacts();
+    this.reset();
+});
+
+// Delete contact
+function deleteContact(index){
+    contacts.splice(index,1);
+    localStorage.setItem('emergencyContacts', JSON.stringify(contacts));
+    displayContacts();
+}
+
+// Call contact
+function callContact(number){
+    window.location.href = `tel:${number}`;
+}
+
+// Initial display
+displayContacts();
+</script>
+
+</body>
+</html>
+<!-- Back to Home Button for emergency.html -->
+<a href="index.html" class="back-home">🏠 Back to Home</a>
+
+<style>
+.back-home {
+    display: inline-block;
+    margin: 20px 20px 10px 20px;
+    padding: 12px 20px;
+    background: #ff1493;
+    color: white;
+    font-weight: bold;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 16px;
+    box-shadow: 0 5px 15px rgba(255,20,147,0.4);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+.back-home:hover {
+    background: #ff6eb4;
+    transform: scale(1.1);
+}
+</style>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pregnancy & Postpartum Care</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    background: linear-gradient(to right, #ffe6f2, #fff0f5);
+    transition: background 0.5s ease;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: #ff1493;
+    color: white;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+/* Top corner buttons */
+.top-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.top-buttons a {
+    text-decoration: none;
+    color: white;
+    background: #ff6eb4;
+    padding: 10px 15px;
+    border-radius: 15px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.top-buttons a:hover {
+    background: #ff1493;
+}
+
+.top-buttons span {
+    margin-left: 5px;
+}
+
+/* Main Buttons Section */
+.main-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    padding: 60px 20px;
+}
+
+.main-section a {
+    text-decoration: none;
+    width: 180px;
+    height: 180px;
+    background: #fff0f5;
+    border-radius: 25px;
+    box-shadow: 0 5px 20px rgba(255,20,147,0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ff1493;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.main-section a:hover {
+    transform: scale(1.1) rotate(-1deg);
+    box-shadow: 0 12px 30px rgba(255,20,147,0.5);
+}
+
+.main-section span {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+/* Back / Home button */
+.back-home {
+    display: inline-block;
+    margin: 20px;
+    padding: 10px 15px;
+    background: #ff6eb4;
+    color: white;
+    font-weight: bold;
+    border-radius: 15px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.back-home:hover {
+    background: #ff1493;
+}
+
+/* Login overlay */
+#loginOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+.login-container {
+    background: #fff0f5;
+    padding: 35px 45px;
+    border-radius: 25px;
+    box-shadow: 0 5px 25px rgba(255,20,147,0.3);
+    width: 400px;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+
+.login-container h2 {
+    text-align: center;
+    color: #ff1493;
+    margin-bottom: 25px;
+}
+
+.login-container label {
+    display: block;
+    margin-bottom: 5px;
+    color: #ff1493;
+    font-weight: bold;
+}
+
+.login-container input, .login-container select {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 1px solid #ff1493;
+    font-size: 14px;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 12px;
+    background: #ff1493;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.login-container button:hover {
+    background: #ff6eb4;
+    transform: scale(1.05);
+}
+
+/* Toggle login/signin */
+.toggle-btn {
+    background: none;
+    border: none;
+    color: #ff1493;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.toggle-btn:hover {
+    text-decoration: underline;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>👶 Pregnancy Care</h1>
+    <div class="top-buttons">
+        <a href="emergency.html">🚨 <span>Emergency</span></a>
+        <a href="profile.html">👤 <span>Profile</span></a>
+    </div>
+</header>
+
+<!-- Main Buttons Section -->
+<div class="main-section">
+    <a href="mood.html"><span>😊</span>Mood Tracker</a>
+    <a href="nutrition.html"><span>🥗</span>Nutrition Guide</a>
+    <a href="chatbot.html"><span>🤖</span>AI Companion</a>
+    <a href="exercise.html"><span>🧘‍♀️</span>Exercises & Yoga</a>
+    <a href="reminder.html"><span>!</span>Reminder</a>
+    <a href="childcare.html"><span>🤱🏻</span>Childcare</a>
+</div>
+
+<!-- Bottom Left Create Account Button -->
+<div style="
+    position: fixed; 
+    bottom: 20px; 
+    left: 20px; 
+    z-index: 1000;
+">
+    <button onclick="window.location.href='login.html'" 
+            style="
+                padding:10px 20px; 
+                border-radius:20px; 
+                background:#FF1493; 
+                color:white; 
+                font-weight:bold; 
+                font-size:16px; 
+                cursor:pointer;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            ">
+        👩‍🍼 Create Account
+    </button>
+</div>
+    

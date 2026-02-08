@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pregnancy Nutrition Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFF0F5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #FF69B4;
+            margin: 20px 0;
+        }
+
+        #monthSelect {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 10px;
+            border: 1px solid #FFB6C1;
+            margin-bottom: 20px;
+        }
+
+        #foodList {
+            width: 90%;
+            max-width: 800px;
+            background-color: #FFF5F7;
+            border: 1px solid #FFB6C1;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        #foodList h2 {
+            color: #FF1493;
+        }
+
+        .food-item {
+            margin-bottom: 10px;
+        }
+
+        #searchContainer {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        #searchInput {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 10px;
+            border: 1px solid #FFB6C1;
+            width: 300px;
+        }
+
+        #searchBtn {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border-radius: 15px;
+            border: none;
+            background-color: #FF69B4;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        #searchBtn:hover {
+            background-color: #FF1493;
+            transform: scale(1.05);
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: none;
+            background-color: #32CD32;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .back-btn:hover {
+            background-color: #228B22;
+            transform: scale(1.05);
+        }
+
+        #searchResult {
+            font-weight: bold;
+            margin-top: 10px;
+            color: #FF4500;
+        }
+    </style>
+</head>
+<body>
+    <h1>🥗 Pregnancy Nutrition Guide</h1>
+
+    <!-- Month selection -->
+    <label for="monthSelect">Select Month of Pregnancy:</label>
+    <select id="monthSelect" onchange="showFoods()">
+        <option value="">--Select Month--</option>
+        <option value="1">1st Month</option>
+        <option value="2">2nd Month</option>
+        <option value="3">3rd Month</option>
+        <option value="4">4th Month</option>
+        <option value="5">5th Month</option>
+        <option value="6">6th Month</option>
+        <option value="7">7th Month</option>
+        <option value="8">8th Month</option>
+        <option value="9">9th Month</option>
+    </select>
+
+    <!-- Recommended foods -->
+    <div id="foodList">
+        <h2>Recommended Foods</h2>
+        <div id="foods"></div>
+    </div>
+
+    <!-- Search bar -->
+    <div id="searchContainer">
+        <input type="text" id="searchInput" placeholder="Search if a food is safe">
+        <button id="searchBtn" onclick="searchFood()">Search</button>
+    </div>
+    <div id="searchResult"></div>
+
+    <button class="back-btn" onclick="window.location.href='index.html'">🏠 Back to Home</button>
+
+    <script>
+        // Data for recommended foods per month
+        const nutritionData = {
+            1: [
+                {name: "Leafy Greens", amount: "1-2 servings/day"},
+                {name: "Citrus Fruits", amount: "1-2 servings/day"},
+                {name: "Whole Grains", amount: "3-4 servings/day"},
+                {name: "Lean Protein", amount: "2 servings/day"},
+                {name: "Dairy", amount: "2-3 servings/day"}
+            ],
+            2: [
+                {name: "Eggs", amount: "1-2/day"},
+                {name: "Berries", amount: "1 cup/day"},
+                {name: "Nuts", amount: "A small handful/day"},
+                {name: "Oats", amount: "1-2 servings/day"},
+                {name: "Milk/Yogurt", amount: "2 servings/day"}
+            ],
+            3: [
+                {name: "Spinach", amount: "1-2 cups/day"},
+                {name: "Salmon (low mercury)", amount: "2 servings/week"},
+                {name: "Carrots", amount: "1 cup/day"},
+                {name: "Beans/Lentils", amount: "1-2 servings/day"},
+                {name: "Cheese", amount: "1 serving/day"}
+            ],
+            4: [
+                {name: "Broccoli", amount: "1 cup/day"},
+                {name: "Apples", amount: "1-2/day"},
+                {name: "Eggs", amount: "1-2/day"},
+                {name: "Brown Rice", amount: "1-2 servings/day"},
+                {name: "Milk/Yogurt", amount: "2 servings/day"}
+            ],
+            5: [
+                {name: "Sweet Potatoes", amount: "1 medium/day"},
+                {name: "Bananas", amount: "1/day"},
+                {name: "Chicken", amount: "2 servings/day"},
+                {name: "Spinach", amount: "1-2 cups/day"},
+                {name: "Yogurt", amount: "1-2 servings/day"}
+            ],
+            6: [
+                {name: "Leafy Greens", amount: "1-2 cups/day"},
+                {name: "Oranges", amount: "1-2/day"},
+                {name: "Fish low in mercury", amount: "2 servings/week"},
+                {name: "Nuts", amount: "A handful/day"},
+                {name: "Milk", amount: "2 servings/day"}
+            ],
+            7: [
+                {name: "Broccoli", amount: "1 cup/day"},
+                {name: "Carrots", amount: "1 cup/day"},
+                {name: "Eggs", amount: "1-2/day"},
+                {name: "Quinoa", amount: "1-2 servings/day"},
+                {name: "Yogurt", amount: "2 servings/day"}
+            ],
+            8: [
+                {name: "Leafy Greens", amount: "1-2 cups/day"},
+                {name: "Berries", amount: "1 cup/day"},
+                {name: "Lean Meat", amount: "2 servings/day"},
+                {name: "Whole Grains", amount: "3 servings/day"},
+                {name: "Milk/Yogurt", amount: "2 servings/day"}
+            ],
+            9: [
+                {name: "Spinach", amount: "1-2 cups/day"},
+                {name: "Eggs", amount: "1-2/day"},
+                {name: "Salmon", amount: "2 servings/week"},
+                {name: "Fruits", amount: "2 servings/day"},
+                {name: "Milk/Yogurt", amount: "2 servings/day"}
+            ]
+        };
+
+        // Food safety database for search
+        const foodSafety = {
+            "honey": "Unsafe before 1 year of age.",
+            "raw fish": "Avoid during pregnancy due to risk of mercury.",
+            "raw eggs": "Avoid due to risk of salmonella.",
+            "caffeine": "Limit intake to 1-2 cups/day.",
+            "alcohol": "Completely avoid during pregnancy.",
+            "leafy greens": "Safe, rich in folate.",
+            "milk": "Safe, provides calcium.",
+            "salmon": "Safe, low in mercury.",
+            "nuts": "Safe, rich in healthy fats.",
+            "chicken": "Safe if cooked properly.",
+            "cheese": "Safe if pasteurized.",
+            "carrots": "Safe, rich in vitamin A.",
+            "sweet potatoes": "Safe, rich in beta-carotene.",
+            "berries": "Safe and nutritious.",
+            "oats": "Safe, high in fiber."
+        };
+
+        function showFoods() {
+            const month = document.getElementById("monthSelect").value;
+            const foodsDiv = document.getElementById("foods");
+            foodsDiv.innerHTML = "";
+
+            if (!month) {
+                foodsDiv.innerHTML = "<p>Please select a month to see recommended foods.</p>";
+                return;
+            }
+
+            const foods = nutritionData[month];
+            if (!foods) {
+                foodsDiv.innerHTML = "<p>No data available for this month.</p>";
+                return;
+            }
+
+            foods.forEach(f => {
+                const div = document.createElement("div");
+                div.className = "food-item";
+                div.textContent = `${f.name} - Recommended: ${f.amount}`;
+                foodsDiv.appendChild(div);
+            });
+        }
+
+        function searchFood() {
+            const query = document.getElementById("searchInput").value.toLowerCase().trim();
+            const resultDiv = document.getElementById("searchResult");
+
+            if (!query) {
+                resultDiv.textContent = "Please enter a food to search.";
+                return;
+            }
+
+            if (foodSafety[query]) {
+                resultDiv.textContent = `${query.charAt(0).toUpperCase() + query.slice(1)}: ${foodSafety[query]}`;
+            } else {
+                resultDiv.textContent = `Sorry, information about "${query}" is not available.`;
+            }
+        }
+    </script>
+</body>
+</html>

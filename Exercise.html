@@ -1,0 +1,238 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pregnancy & Postpartum Exercises</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to right, #fff0f5, #ffe6f2);
+}
+
+header {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #ff6eb4, #ff1493);
+    color: white;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+header h1 {
+    font-size: 36px;
+    margin: 0;
+}
+
+.selection-buttons {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.selection-buttons button {
+    background: #ff1493;
+    color: white;
+    font-size: 20px;
+    padding: 15px 30px;
+    margin: 15px;
+    border-radius: 25px;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 5px 15px rgba(255,20,147,0.3);
+    transition: 0.3s;
+}
+
+.selection-buttons button:hover {
+    background: #ff6eb4;
+}
+
+.exercise-section {
+    display: none; /* hidden by default, shown after selection */
+    margin: 40px 20px;
+}
+
+.exercise-section h2 {
+    font-size: 28px;
+    color: #ff1493;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.exercise-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.exercise-card {
+    width: 280px;
+    background: #ffe6f2;
+    border-radius: 20px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(255,20,147,0.3);
+    transition: all 0.3s ease;
+}
+
+.exercise-card img {
+    width: 200px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+}
+
+.exercise-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(255,20,147,0.5);
+}
+
+.exercise-card h4 {
+    margin: 5px 0;
+    color: #ff1493;
+}
+
+.exercise-card p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    color: white;
+    background: #ff1493;
+    margin-top: 50px;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>🧘 Pregnancy & Postpartum Exercises</h1>
+</header>
+
+<div class="selection-buttons">
+    <button onclick="showExercises('pregnancy')">🤰 Pregnancy</button>
+    <button onclick="showExercises('postpartum')">👶 Postpartum</button>
+</div>
+
+<!-- Pregnancy Exercises -->
+<div id="pregnancy" class="exercise-section">
+    <h2>Pregnancy Exercises & Yoga</h2>
+    <div class="exercise-list">
+        <div class="exercise-card">
+            <img src="images/cat-cow.jpg" alt="Cat-Cow Pose">
+            <h4>🐱 Cat-Cow Pose</h4>
+            <p><strong>Steps:</strong> On all fours, inhale arching back, exhale rounding back. Repeat slowly.</p>
+            <p><strong>Reps/Duration:</strong> 10-15 reps, morning & evening</p>
+            <p><strong>Benefits:</strong> Relieves back pain, improves flexibility</p>
+        </div>
+        <div class="exercise-card">
+            <img src="images/butterfly.jpg" alt="Butterfly Pose">
+            <h4>🦋 Butterfly Pose</h4>
+            <p><strong>Steps:</strong> Sit with soles together, gently press knees down, breathe deeply.</p>
+            <p><strong>Duration:</strong> 5-10 min daily</p>
+            <p><strong>Benefits:</strong> Opens hips, relaxes pelvic muscles</p>
+        </div>
+        <div class="exercise-card">
+            <img src="images/pelvic-tilt.jpg" alt="Pelvic Tilts">
+            <h4>🏋️ Pelvic Tilts</h4>
+            <p><strong>Steps:</strong> Lie on back, knees bent, flatten lower back against floor, hold, release.</p>
+            <p><strong>Reps:</strong> 10-15 reps, daily</p>
+            <p><strong>Benefits:</strong> Strengthens core, relieves lower back pain</p>
+        </div>
+        <div class="exercise-card">
+            <img src="images/kegel.jpg" alt="Kegel Exercises">
+            <h4>💪 Kegel Exercises</h4>
+            <p><strong>Steps:</strong> Tighten pelvic floor muscles, hold 5-10 sec, release.</p>
+            <p><strong>Reps:</strong> 3-4 times/day</p>
+            <p><strong>Benefits:</strong> Strengthens pelvic floor, aids childbirth</p>
+        </div>
+    </div>
+</div>
+
+<!-- Postpartum Exercises -->
+<div id="postpartum" class="exercise-section">
+    <h2>Postpartum Exercises & Yoga</h2>
+    <div class="exercise-list">
+        <div class="exercise-card">
+            <img src="images/postpartum-yoga.jpg" alt="Postpartum Yoga">
+            <h4>🧘 Postpartum Yoga</h4>
+            <p><strong>Steps:</strong> Gentle stretches, core activation, deep breathing.</p>
+            <p><strong>Duration:</strong> 15-30 min, 3-4 times/week</p>
+            <p><strong>Benefits:</strong> Restores strength & flexibility</p>
+        </div>
+        <div class="exercise-card">
+            <img src="images/walking.jpg" alt="Walking">
+            <h4>🚶 Gentle Walking</h4>
+            <p><strong>Steps:</strong> Walk at comfortable pace, maintain upright posture.</p>
+            <p><strong>Duration:</strong> 20-30 min daily</p>
+            <p><strong>Benefits:</strong> Boosts mood, improves circulation</p>
+        </div>
+        <div class="exercise-card">
+            <img src="images/bridge.jpg" alt="Bridge Pose">
+            <h4>🌉 Bridge Pose</h4>
+            <p><strong>Steps:</strong> Lie on back, knees bent, lift hips, hold 5-10 sec, lower down.</p>
+            <p><strong>Reps:</strong> 10 reps, daily</p>
+            <p><strong>Benefits:</strong> Strengthens glutes & core</p>
+        </div>
+        <div class="exercise-card">
+            <img src="images/deep-breathing.jpg" alt="Deep Breathing">
+            <h4>🌬️ Deep Breathing</h4>
+            <p><strong>Steps:</strong> Inhale slowly, hold, exhale completely. Repeat.</p>
+            <p><strong>Duration:</strong> 5-10 min daily</p>
+            <p><strong>Benefits:</strong> Reduces stress, enhances relaxation</p>
+        </div>
+    </div>
+</div>
+
+<footer>
+  © 2026 Pregnancy & Postpartum Care App | Yoga & Exercise Guidance
+</footer>
+
+<script>
+function showExercises(type){
+    // Hide both sections first
+    document.getElementById('pregnancy').style.display = 'none';
+    document.getElementById('postpartum').style.display = 'none';
+
+    // Show the selected section
+    if(type === 'pregnancy'){
+        document.getElementById('pregnancy').style.display = 'block';
+    } else if(type === 'postpartum'){
+        document.getElementById('postpartum').style.display = 'block';
+    }
+
+    // Scroll to section
+    window.scrollTo({ top: 200, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
+<!-- Back to Home Button for exercise.html -->
+<a href="index.html" class="back-home">🏠 Back to Home</a>
+
+<style>
+.back-home {
+    display: inline-block;
+    margin: 20px 20px 10px 20px;
+    padding: 12px 20px;
+    background: #ff1493;
+    color: white;
+    font-weight: bold;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 16px;
+    box-shadow: 0 5px 15px rgba(255,20,147,0.4);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+.back-home:hover {
+    background: #ff6eb4;
+    transform: scale(1.1);
+}
+</style>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login / Sign In - Pregnancy App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #FFF0F5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: #FFE4E1;
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h2 {
+            text-align: center;
+            color: #FF1493;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border-radius: 20px;
+            background: #FFB6C1;
+            color: white;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .tab.active {
+            background: #FF1493;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 20px;
+            border: none;
+            background: #32CD32;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #228B22;
+        }
+
+        .back-btn {
+            margin-top: 15px;
+            background: #FF1493;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Pregnancy App</h2>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <div class="tab active" id="loginTab">Login</div>
+        <div class="tab" id="signinTab">Sign In</div>
+    </div>
+
+    <!-- Login Form -->
+    <div class="form-section active" id="loginForm">
+        <input type="text" id="loginUsername" placeholder="Username or Email">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <!-- Sign In Form -->
+    <div class="form-section" id="signinForm">
+        <input type="text" id="name" placeholder="Full Name">
+        <input type="text" id="number" placeholder="Phone Number">
+        <input type="email" id="email" placeholder="Email">
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <input type="number" id="age" placeholder="Age">
+        <input type="date" id="dob" placeholder="Date of Birth">
+        <input type="number" id="weight" placeholder="Weight (kg)">
+        <input type="number" id="height" placeholder="Height (cm)">
+        <input type="number" id="pregMonth" placeholder="Month of Pregnancy">
+        <select id="maritalStatus">
+            <option value="">Marital Status</option>
+            <option value="Single">Single</option>
+            <option value="Married">Married</option>
+        </select>
+        <button onclick="signIn()">Create Account</button>
+    </div>
+
+    <button class="back-btn" onclick="window.location.href='index.html'">🏠 Back to Home</button>
+</div>
+
+<script>
+    // Tab switching
+    const loginTab = document.getElementById('loginTab');
+    const signinTab = document.getElementById('signinTab');
+    const loginForm = document.getElementById('loginForm');
+    const signinForm = document.getElementById('signinForm');
+
+    loginTab.addEventListener('click', () => {
+        loginTab.classList.add('active');
+        signinTab.classList.remove('active');
+        loginForm.classList.add('active');
+        signinForm.classList.remove('active');
+    });
+
+    signinTab.addEventListener('click', () => {
+        signinTab.classList.add('active');
+        loginTab.classList.remove('active');
+        signinForm.classList.add('active');
+        loginForm.classList.remove('active');
+    });
+
+    // Sign In
+    function signIn() {
+        const userProfile = {
+            name: document.getElementById('name').value,
+            number: document.getElementById('number').value,
+            email: document.getElementById('email').value,
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value,
+            age: document.getElementById('age').value,
+            dob: document.getElementById('dob').value,
+            weight: document.getElementById('weight').value,
+            height: document.getElementById('height').value,
+            pregMonth: document.getElementById('pregMonth').value,
+            maritalStatus: document.getElementById('maritalStatus').value
+        };
+
+        // Simple validation
+        for(const key in userProfile){
+            if(userProfile[key] === ''){
+                alert('Please fill all fields.');
+                return;
+            }
+        }
+
+        // Save to localStorage
+        localStorage.setItem('userProfile', JSON.stringify(userProfile));
+        alert('Account created successfully!');
+        window.location.href = 'index.html';
+    }
+
+    // Login
+    function login() {
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+
+        const storedUser = JSON.parse(localStorage.getItem('userProfile'));
+
+        if(!storedUser){
+            alert('No account found. Please Sign In first.');
+            return;
+        }
+
+        if((username === storedUser.username || username === storedUser.email) && password === storedUser.password){
+            alert('Login successful! Welcome ' + storedUser.name);
+            window.location.href = 'index.html';
+        } else {
+            alert('Invalid username/email or password.');
+        }
+    }
+</script>
+
+</body>
+</html>
