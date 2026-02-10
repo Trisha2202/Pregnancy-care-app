@@ -144,11 +144,6 @@ def mental_health_answers(lang):
 
 
 # ---------------- MAIN CHAT ROUTE ---------------- #
-@app.get("/", response_class = HTMLResponse)
-async def home():
-    with open("static/index.html") as f:
-        return f.read()
-
 
 @app.post("/chat")
 def chat(req: ChatRequest):
