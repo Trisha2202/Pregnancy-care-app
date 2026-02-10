@@ -8,7 +8,7 @@ import random
 app = FastAPI(title="Pregnancy Care AI Chatbot")
 
 # Allow frontend connection
-app.mount("/static",
+app.mount("/",
          StaticFiles(directory = "static", html=True),
           name = "static")
 
