@@ -44,15 +44,38 @@ async function sendMessage() {
     const userMessage = document.getElementById('userInput').value;
     if(!userMessage) return;
 
-    const response = await fetch("http://127.0.0.1:8000/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage })
-    });
+async function sendMessage() {
+    const userInput = document.getElementById("userInput");
+    const language = document.getElementById("language").value;
+    const message = userInput.value.trim();
 
-    const data = await response.json();
-    const chatBox = document.getElementById('chatBox');
-    chatBox.innerHTML += `<p><strong>You:</strong> ${userMessage}</p>`;
-    chatBox.innerHTML += `<p><strong>AI:</strong> ${data.reply}</p>`;
-    document.getElementById('userInput').value = "";
+    if (message === "") return;
+
+    addMessage(message, "user");
+    userInput.value = "";
+
+    try {
+        const response = await fetch("https://pregnancy-care-app.onrender.com/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: message,
+                language: language
+            })
+        });
+
+        if (!response.ok) {
+            addMessage("⚠️ Server error. Please try again.", "bot");
+            return;
+        }
+
+        const data = await response.json();
+        addMessage(data.reply, "bot");
+
+    } catch (error) {
+        addMessage("❌ Cannot connect to server. Please start backend.", "bot");
+        console.error(error);
+    }
 }

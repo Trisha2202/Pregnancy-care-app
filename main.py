@@ -1,12 +1,11 @@
-
-# main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import random
 
-app = FastAPI(title="Pregnancy AI Companion - Expanded")
+app = FastAPI(title="Pregnancy Care AI Chatbot")
 
-# Enable CORS so frontend can access backend
+# Allow frontend connection
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -15,149 +14,169 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Input model
 class ChatRequest(BaseModel):
     message: str
-    user_name: str = "Guest"
-    pregnancy_month: int = None
-    postpartum_weeks: int = None
-    baby_age_months: int = None
+    language: str | None = "en"   # en / hi / hinglish
 
-# Home endpoint
+
 @app.get("/")
-async def home():
-    return {"message": "Expanded Pregnancy AI Companion Backend is alive!"}
+def root():
+    return {"status": "AI Pregnancy Chatbot Backend is running 🚀"}
 
-# Chat endpoint
+
+# ---------------- AI LOGIC ---------------- #
+
+def pregnancy_answers(lang):
+    responses = {
+        "en": [
+            "Pregnancy is a beautiful journey 🤍 Make sure you eat nutritious food, stay hydrated, and get enough rest.",
+            "During pregnancy, regular checkups, iron-rich foods, and gentle exercise are very important.",
+            "Avoid alcohol, smoking, and raw foods during pregnancy."
+        ],
+        "hi": [
+            "गर्भावस्था एक सुंदर यात्रा है 🤍 संतुलित आहार और आराम बहुत ज़रूरी है।",
+            "प्रेगनेंसी में नियमित जांच और पोषक तत्व लेना जरूरी होता है।",
+            "शराब और धूम्रपान से दूर रहें।"
+        ],
+        "hinglish": [
+            "Pregnancy ek beautiful journey hai 🤍 healthy khana, rest aur hydration zaroori hai.",
+            "Pragnancy mein doctor checkups aur iron-rich food bahut important hai."
+        ]
+    }
+    return random.choice(responses.get(lang, responses["en"]))
+
+
+def nutrition_answers(lang):
+    responses = {
+        "en": [
+            "Eat fruits, vegetables, whole grains, milk, nuts, and pulses during pregnancy.",
+            "Avoid junk food, excess sugar, and street food during pregnancy.",
+            "Iron, calcium, folic acid, and protein are essential nutrients."
+        ],
+        "hi": [
+            "फल, सब्ज़ियां, दूध और दालें गर्भावस्था में बहुत फायदेमंद होती हैं।",
+            "जंक फूड और ज्यादा मीठा खाने से बचें।"
+        ],
+        "hinglish": [
+            "Fruits, veggies, milk aur protein pregnancy mein must hote hain.",
+            "Junk food avoid karna better hota hai."
+        ]
+    }
+    return random.choice(responses.get(lang, responses["en"]))
+
+
+def exercise_answers(lang):
+    responses = {
+        "en": [
+            "Walking, prenatal yoga, and breathing exercises are safe during pregnancy.",
+            "Avoid heavy workouts and high-impact exercises.",
+            "Always consult your doctor before starting exercise."
+        ],
+        "hi": [
+            "प्रेगनेंसी में हल्की वॉक और योग फायदेमंद होते हैं।",
+            "भारी व्यायाम से बचें।"
+        ],
+        "hinglish": [
+            "Light walking aur prenatal yoga safe hote hain.",
+            "Heavy workout avoid karo."
+        ]
+    }
+    return random.choice(responses.get(lang, responses["en"]))
+
+
+def postpartum_answers(lang):
+    responses = {
+        "en": [
+            "Postpartum recovery takes time. Rest, good nutrition, and emotional support are important.",
+            "Mild exercises and pelvic floor workouts help after delivery.",
+            "Postpartum mood swings are normal, but seek help if sadness persists."
+        ],
+        "hi": [
+            "डिलीवरी के बाद शरीर को ठीक होने में समय लगता है।",
+            "भावनात्मक सहयोग बहुत जरूरी होता है।"
+        ],
+        "hinglish": [
+            "Delivery ke baad rest aur nutrition bahut zaroori hai.",
+            "Mood swings common hote hain."
+        ]
+    }
+    return random.choice(responses.get(lang, responses["en"]))
+
+
+def childcare_answers(lang):
+    responses = {
+        "en": [
+            "For babies under 6 months, only breast milk or formula is recommended.",
+            "Introduce solid foods slowly after 6 months.",
+            "Always check food allergies before feeding new food."
+        ],
+        "hi": [
+            "6 महीने तक केवल मां का दूध या फॉर्मूला दूध दें।",
+            "धीरे-धीरे ठोस आहार शुरू करें।"
+        ],
+        "hinglish": [
+            "6 months tak sirf breast milk best hota hai.",
+            "Solid food slowly introduce karo."
+        ]
+    }
+    return random.choice(responses.get(lang, responses["en"]))
+
+
+def mental_health_answers(lang):
+    responses = {
+        "en": [
+            "It’s okay to feel overwhelmed. You are doing your best 🤍",
+            "Talking to someone you trust can help reduce stress.",
+            "Meditation and deep breathing can calm your mind."
+        ],
+        "hi": [
+            "तनाव महसूस करना सामान्य है। आप अच्छा कर रही हैं 🤍",
+            "किसी अपने से बात करना मददगार होता है।"
+        ],
+        "hinglish": [
+            "Overwhelmed feel karna normal hai 🤍",
+            "Deep breathing try karo."
+        ]
+    }
+    return random.choice(responses.get(lang, responses["en"]))
+
+
+# ---------------- MAIN CHAT ROUTE ---------------- #
+
 @app.post("/chat")
-async def chat_endpoint(data: ChatRequest):
-    message = data.message.lower()
-    user_name = data.user_name or "Guest"
-    reply = ""
+def chat(req: ChatRequest):
+    msg = req.message.lower()
+    lang = req.language or "en"
 
-    # ===== Stress & Mental Health =====
-    if any(word in message for word in ["stress", "anxiety", "anxious", "worry"]):
-        reply = (
-            f"Hi {user_name}, I understand pregnancy can be stressful.\n"
-            "- Practice deep breathing exercises 5-10 minutes daily.\n"
-            "- Try gentle prenatal yoga.\n"
-            "- Keep a journal to express your thoughts.\n"
-            "- Talk to a partner, friend, or counselor.\n"
-            "- Avoid overexertion and ensure proper sleep."
-        )
+    if any(word in msg for word in ["hi", "hello", "hey", "namaste"]):
+        return {"reply": random.choice([
+            "Hello 🤍 How can I help you today?",
+            "Hi there 🌸 Ask me anything about pregnancy or childcare.",
+            "Namaste 🙏 Main aapki madad ke liye hoon."
+        ])}
 
-    elif any(word in message for word in ["sleep", "insomnia", "tired"]):
-        reply = (
-            f"{user_name}, for better sleep during pregnancy:\n"
-            "- Sleep on your left side with pillows for support.\n"
-            "- Keep a consistent bedtime routine.\n"
-            "- Avoid caffeine or heavy meals 3 hours before bed.\n"
-            "- Take short naps during the day if needed."
-        )
+    if "pregnan" in msg:
+        return {"reply": pregnancy_answers(lang)}
 
-    # ===== Nutrition =====
-    elif any(word in message for word in ["nutrition", "diet", "food", "meal"]):
-        reply = (
-            f"{user_name}, here’s some nutrition advice:\n"
-            "- Include leafy greens, colorful vegetables, and fruits.\n"
-            "- Eat protein-rich foods: eggs, chicken, fish low in mercury, beans.\n"
-            "- Whole grains for energy and fiber.\n"
-            "- Dairy for calcium (milk, yogurt, cheese).\n"
-            "- Stay hydrated: 8-10 glasses of water daily.\n"
-            "- Avoid alcohol, raw meat, unpasteurized cheese, and excessive caffeine."
-        )
+    if any(word in msg for word in ["food", "eat", "nutrition", "diet"]):
+        return {"reply": nutrition_answers(lang)}
 
-    elif any(word in message for word in ["craving", "foods to avoid"]):
-        reply = (
-            f"{user_name}, during pregnancy:\n"
-            "- Moderation is key. Occasional cravings are fine.\n"
-            "- Avoid excessive junk food, highly processed foods, and sugary drinks.\n"
-            "- Reduce consumption of high-mercury fish (shark, swordfish, king mackerel).\n"
-            "- Limit caffeine to 1-2 cups of coffee per day."
-        )
+    if any(word in msg for word in ["exercise", "yoga", "workout"]):
+        return {"reply": exercise_answers(lang)}
 
-    # ===== Exercise & Yoga =====
-    elif any(word in message for word in ["exercise", "yoga", "stretching", "walk"]):
-        reply = (
-            f"{user_name}, prenatal exercise tips:\n"
-            "- Daily walking for 20-30 mins is safe and effective.\n"
-            "- Prenatal yoga helps flexibility, reduces stress, and strengthens muscles.\n"
-            "- Avoid high-impact or contact sports.\n"
-            "- Do Kegel exercises to strengthen pelvic floor muscles.\n"
-            "- Stop any activity if you feel dizziness, pain, or bleeding."
-        )
+    if any(word in msg for word in ["postpartum", "after delivery"]):
+        return {"reply": postpartum_answers(lang)}
 
-    # ===== Postpartum =====
-    elif any(word in message for word in ["postpartum", "after delivery", "recovery"]):
-        reply = (
-            f"{user_name}, postpartum recovery tips:\n"
-            "- Rest whenever you can and accept help from family.\n"
-            "- Gentle stretches and light walking improve recovery.\n"
-            "- Eat nutritious meals and stay hydrated.\n"
-            "- Breastfeeding requires patience and support.\n"
-            "- Watch for mood changes; postpartum depression is common and normal. Seek help if needed."
-        )
+    if any(word in msg for word in ["baby", "child", "infant"]):
+        return {"reply": childcare_answers(lang)}
 
-    elif any(word in message for word in ["breastfeeding", "milk supply", "lactation"]):
-        reply = (
-            f"{user_name}, breastfeeding guidance:\n"
-            "- Nurse on demand, typically every 2-3 hours.\n"
-            "- Ensure proper latch to prevent pain.\n"
-            "- Stay hydrated and maintain a balanced diet.\n"
-            "- Rest as much as possible.\n"
-            "- Track feeding times and baby’s weight gain for guidance."
-        )
+    if any(word in msg for word in ["sad", "stress", "anxiety", "depressed"]):
+        return {"reply": mental_health_answers(lang)}
 
-    # ===== Baby / Childcare =====
-    elif any(word in message for word in ["baby", "newborn", "infant", "childcare"]):
-        reply = (
-            f"{user_name}, newborn care tips:\n"
-            "- Feed on demand; monitor baby’s hunger cues.\n"
-            "- Burp the baby after every feed.\n"
-            "- Keep skin clean; change diapers frequently.\n"
-            "- Safe sleep: baby on back, firm mattress, no loose bedding.\n"
-            "- Monitor for rashes and use gentle, baby-safe skincare products."
-        )
-
-    elif any(word in message for word in ["baby food", "food for baby", "infant nutrition"]):
-        age = data.baby_age_months or 6
-        if age <= 6:
-            reply = (
-                f"{user_name}, babies 0-6 months should be exclusively breastfed or formula-fed. "
-                "Avoid solid foods until about 6 months."
-            )
-        elif 6 < age <= 8:
-            reply = (
-                f"{user_name}, babies {age} months can start pureed fruits, vegetables, and cereals. "
-                "Introduce one new food at a time and watch for allergies."
-            )
-        elif 8 < age <= 12:
-            reply = (
-                f"{user_name}, babies {age} months can eat soft finger foods like mashed fruits, cooked vegetables, and small pieces of soft proteins. "
-                "Avoid honey, whole nuts, and processed sugar."
-            )
-        else:
-            reply = f"{user_name}, continue age-appropriate meals with balanced nutrition and avoid processed foods."
-
-    elif any(word in message for word in ["baby skincare", "baby lotion", "baby oil"]):
-        reply = (
-            f"{user_name}, baby skincare tips:\n"
-            "- Use gentle, fragrance-free lotions.\n"
-            "- Natural oils like coconut oil are safe in small amounts.\n"
-            "- Avoid adult skincare products.\n"
-            "- Patch test any new product.\n"
-            "- Keep skin clean and dry to prevent rashes."
-        )
-
-    # ===== General fallback =====
-    else:
-        reply = (
-            f"Hi {user_name}! I am your AI Pregnancy & Childcare Companion.\n"
-            "I can help with:\n"
-            "- Stress, sleep, nutrition, and exercise during pregnancy\n"
-            "- Postpartum recovery, breastfeeding, mental health\n"
-            "- Baby feeding, nutrition, and skincare\n"
-            "- Ask me questions like 'How can I reduce stress?', 'What foods are safe?', or 'Postpartum exercises'."
-        )
-
-    return {"reply": reply}
+    return {
+        "reply": random.choice([
+            "I’m here to support you 🤍 Please tell me more.",
+            "Could you explain your concern a bit more?",
+            "I can help with pregnancy, baby care, nutrition, or mental health 🌸"
+        ])
+    }
