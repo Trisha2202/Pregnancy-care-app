@@ -41,10 +41,6 @@ function checkSafety() {
     }
 }
 async function sendMessage() {
-    const userMessage = document.getElementById('userInput').value;
-    if(!userMessage) return;
-}
-async function sendMessage() {
     const userInput = document.getElementById("userInput");
     const language = document.getElementById("language").value;
     const message = userInput.value.trim();
