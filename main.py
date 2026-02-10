@@ -25,10 +25,6 @@ class ChatRequest(BaseModel):
     language: str | None = "en"   # en / hi / hinglish
 
 
-@app.get("/")
-def root():
-    return {"status": "AI Pregnancy Chatbot Backend is running 🚀"}
-
 
 # ---------------- AI LOGIC ---------------- #
 
