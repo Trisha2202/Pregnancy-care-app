@@ -8,9 +8,7 @@ import random
 app = FastAPI(title="Pregnancy Care AI Chatbot")
 
 # Allow frontend connection
-app.mount("/",
-         StaticFiles(directory = "static", html=True),
-          name = "static")
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -182,3 +180,8 @@ def chat(req: ChatRequest):
             "I can help with pregnancy, baby care, nutrition, or mental health 🌸"
         ])
     }
+
+
+app.mount("/",
+         StaticFiles(directory = "static", html=True),
+          name = "static")
