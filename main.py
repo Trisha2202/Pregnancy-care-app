@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import random
@@ -6,6 +8,10 @@ import random
 app = FastAPI(title="Pregnancy Care AI Chatbot")
 
 # Allow frontend connection
+app.mount("/static",
+         StaticFiles(directory = "static"),
+          name = "static")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -142,6 +148,11 @@ def mental_health_answers(lang):
 
 
 # ---------------- MAIN CHAT ROUTE ---------------- #
+@app.get("/", response_class = HTMLResponse)
+async def home():
+    with open("static/index.html") as f:
+        return f.read()
+
 
 @app.post("/chat")
 def chat(req: ChatRequest):
