@@ -9,7 +9,7 @@ app = FastAPI(title="Pregnancy Care AI Chatbot")
 
 # Allow frontend connection
 app.mount("/static",
-         StaticFiles(directory = "static", html = True),
+         StaticFiles(directory = "static", html=True),
           name = "static")
 
 app.add_middleware(
